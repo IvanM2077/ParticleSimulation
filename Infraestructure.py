@@ -1,6 +1,7 @@
 import random
 height= 1280
 width =720
+coefImpact =1
 running = True
 dt = 0.1
 gravity = 10

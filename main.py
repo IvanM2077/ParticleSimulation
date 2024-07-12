@@ -89,7 +89,7 @@ while running:
 pygame.quit()
 
 '''
-'''
+
 import pygame
 import random
 import math
@@ -154,8 +154,8 @@ class ColliderBalls():
             m1 = 1  # Masa del círculo 1 (se asume como 1 para simplificar)
             m2 = 1  # Masa del círculo 2 (se asume como 1 para simplificar)
 
-            v1n_new = ((m1 - m2) * v1n + 2 * m2 * v2n) / (m1 + m2)
-            v2n_new = ((m2 - m1) * v2n + 2 * m1 * v1n) / (m1 + m2)
+            v1n_new = (v1n + 2 * v2n)
+            v2n_new = (v2n + 2 * v1n)
 
             # Actualizar velocidades en la dirección normal
             v1_new = Vector(v1.x - v1n * n.x + v1n_new * n.x, v1.y - v1n * n.y + v1n_new * n.y)
@@ -187,7 +187,7 @@ class Circle():
 
     def CheckCollider(self):
         # Verificar colisión con los bordes de la pantalla
-        CoeficientImpact = 0.3
+        CoeficientImpact = 1
         if self.y + self.radius >= width:  # abajo
             self.y = width - self.radius
             self.vy = -self.vy *CoeficientImpact
@@ -202,25 +202,8 @@ class Circle():
             self.vx = -self.vx*CoeficientImpact
 
     def Draw(self):
-        # Crear una superficie para el círculo difuminado
-        surface = pygame.Surface((self.radius * 2 * 5, self.radius * 2 * 5), pygame.SRCALPHA)
-        max_radius = self.radius * 5  # Radio máximo difuminado
-        alpha_step = 50  # Paso de opacidad para capas difuminadas
-
-        # Dibujar círculos difuminados desde el más externo al más interno
-        for i in range(5, 0, -1):
-            alpha = 255 - (5 - i + 1) * alpha_step
-            color_with_alpha = (self.color[0], self.color[1], self.color[2], alpha)
-            pygame.draw.circle(surface, color_with_alpha,
-                               (self.radius * 5, self.radius * 5), int(max_radius - i * self.radius), 0)
-
-        # Dibujar círculo central en la superficie
-        pygame.draw.circle(surface, self.color, (self.radius * 5, self.radius * 5), self.radius)
-
-        # Dibujar la superficie en la pantalla
-        screen.blit(surface, (int(self.x - self.radius * 5), int(self.y - self.radius * 5)))
-
-        #pygame.draw.circle(surface=screen, color=self.color, center=(int(self.x), int(self.y)), radius=self.radius)
+        #pygame.draw.circle(surface=screen,color=self.color,center=(int(self.x), int(self.y)),radius=self.radius)
+        pygame.draw.circle(surface=screen, color=self.color, center=(int(self.x), int(self.y)), radius=self.radius)
 
     def IsColliding(self, other):
         # Calcular la distancia entre los centros de los dos círculos
@@ -242,7 +225,7 @@ def RandomColor():
 
 # Crear lista de círculos
 List = []
-for i in range(1):
+for i in range(400):
     P = RandomPosition()
     Color = RandomColor()
     C = Circle(P[0], P[1], "blue", 20)
@@ -269,6 +252,6 @@ while running:
     #clock.tick()
 
 pygame.quit()
-'''
-import Particle as p
-particle=p.particle(1,2,3,4)
+
+#import Particle as p
+#particle=p.particle(1,2,3,4)

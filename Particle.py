@@ -3,6 +3,8 @@ from Vector import *
 from Infraestructure import *
 from random import *
 from math import *
+import pygame
+#screen = pygame.display.set_mode((height, width))
 
 class particle(Vector):
     def __init__(self,radius):
@@ -24,10 +26,21 @@ class particle(Vector):
     def CheckCollisionsWalls(self):
         if(self.y+self.radius>=width):
             self.y=width-self.radius
-            self.vy = self.vy*-1
-        if(self.y+self.radius<=0):
+            self.vy = self.vy*-1 *coefImpact
+        if(self.y-self.radius<=0):
             self.y=0+self.radius
-            self.vy = self.vy*-1
+            self.vy = self.vy*-1 *coefImpact
+        if(self.x+self.radius>=height):
+            self.x=height-self.radius
+            self.vx= self.vx*-1*coefImpact
+        if(self.x-self.radius<0):
+            self.x=0+self.radius
+            self.vx= self.vx*-1*coefImpact
+
+    def Draw(self, screen):
+        pygame.draw.circle(surface=screen, color=self.color, center=(int(self.x), int(self.y)), radius=self.radius)
+
+
 
 
 
