@@ -270,3 +270,5 @@ while running:
 
 pygame.quit()
 '''
+import Particle as p
+particle=p.particle(1,2,3,4)
