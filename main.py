@@ -154,9 +154,10 @@ class ColliderBalls():
             m1 = 1  # Masa del círculo 1 (se asume como 1 para simplificar)
             m2 = 1  # Masa del círculo 2 (se asume como 1 para simplificar)
 
-            v1n_new = (v1n + 2 * v2n)
-            v2n_new = (v2n + 2 * v1n)
-
+            #v1n_new = ((m1 - m2) * v1n + 2 * m2 * v2n) / (m1 + m2)
+            #v2n_new = ((m2 - m1) * v2n + 2 * m1 * v1n) / (m1 + m2)
+            v1n_new =v2n
+            v2n_new =v1n
             # Actualizar velocidades en la dirección normal
             v1_new = Vector(v1.x - v1n * n.x + v1n_new * n.x, v1.y - v1n * n.y + v1n_new * n.y)
             v2_new = Vector(v2.x - v2n * n.x + v2n_new * n.x, v2.y - v2n * n.y + v2n_new * n.y)
