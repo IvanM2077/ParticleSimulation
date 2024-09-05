@@ -92,7 +92,7 @@ pygame.quit()
 
 
 
-'''
+
 import pygame
 import random
 import math
@@ -261,7 +261,7 @@ pygame.quit()
 #particle=p.particle(1,2,3,4)
 
 
-'''
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
