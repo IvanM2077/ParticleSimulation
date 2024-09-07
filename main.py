@@ -92,7 +92,6 @@ pygame.quit()
 
 
 
-
 import pygame
 import random
 import math
@@ -260,99 +259,3 @@ pygame.quit()
 #import Particle as p
 #particle=p.particle(1,2,3,4)
 
-
-
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-
-
-# Definición de las variables del robot
-def omnidirectional_robot_simulation_with_animation(time_step, total_time, omega, initial_state, ul, uf):
-    # Variables de tiempo
-    t = np.arange(0, total_time, time_step)
-
-    # Estados iniciales
-    xr, yr, phy = initial_state
-
-    # Listas para almacenar la trayectoria
-    trajectory_x = []
-    trajectory_y = []
-    orientations = []
-
-    for _ in t:
-        # Ecuaciones del robot
-        xr_dot = uf * np.cos(phy) - ul * np.sin(phy)
-        yr_dot = uf * np.sin(phy) + ul * np.cos(phy)
-
-        # Actualización de la posición del robot
-        xr += xr_dot * time_step
-        yr += yr_dot * time_step
-        phy += omega * time_step
-
-        # Guardar la posición y orientación
-        trajectory_x.append(xr)
-        trajectory_y.append(yr)
-        orientations.append(phy)
-
-    # Hacer la trayectoria cerrada
-    trajectory_x.append(trajectory_x[0])
-    trajectory_y.append(trajectory_y[0])
-    orientations.append(orientations[0])
-
-    # Función para actualizar la animación
-    fig, ax = plt.subplots()
-    ax.set_xlim(-10, 10)
-    ax.set_ylim(-10, 10)
-    ax.set_aspect('equal')
-
-    # El robot es un cuadrado representado por 4 puntos
-    robot, = ax.plot([], [], 'b-')
-    # Línea para la estela de la trayectoria
-    trail, = ax.plot([], [], 'r-', lw=1)
-
-    # Función para obtener los vértices del cuadrado dado el centro y el ángulo
-    def get_square(x, y, angle, size=1):
-        # Define los vértices del cuadrado en el sistema local
-        local_square = np.array([[-size, -size], [size, -size], [size, size], [-size, size], [-size, -size]])
-
-        # Matriz de rotación
-        rotation_matrix = np.array([[np.cos(angle), -np.sin(angle)],
-                                    [np.sin(angle), np.cos(angle)]])
-
-        # Rotar y trasladar los puntos
-        rotated_square = local_square @ rotation_matrix.T + [x, y]
-        return rotated_square[:, 0], rotated_square[:, 1]
-
-    def update(frame):
-        # Actualiza la posición del cuadrado
-        x = trajectory_x[frame]
-        y = trajectory_y[frame]
-        angle = orientations[frame]
-
-        # Obtener los vértices del cuadrado en la nueva posición y orientación
-        square_x, square_y = get_square(x, y, angle, size=0.5)
-
-        # Actualiza el gráfico del robot
-        robot.set_data(square_x, square_y)
-
-        # Actualiza la estela de la trayectoria
-        trail.set_data(trajectory_x[:frame + 1], trajectory_y[:frame + 1])
-
-        return robot, trail
-
-    # Crear la animación
-    anim = FuncAnimation(fig, update, frames=len(t), interval=100, blit=True)
-    plt.show()
-
-
-# Parámetros de la simulación
-time_step = 0.1  # Paso de tiempo
-total_time = 10  # Tiempo total de simulación
-omega = 0.5  # Velocidad angular
-initial_state = [0, 0, 0]  # Estado inicial (xr, yr, phy)
-ul = 1  # Vector lateral
-uf = 1  # Vector frontal
-
-# Ejecutar la simulación con animación
-omnidirectional_robot_simulation_with_animation(time_step, total_time, omega, initial_state, ul, uf)
